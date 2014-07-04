@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: server.cpp 679 2014-07-02 16:51:01Z serge $
+// $Id: server.cpp 707 2014-07-03 17:34:14Z serge $
 
 #include "../tcpserv/server.h"
 #include "../tcpserv/service.h"
@@ -29,7 +29,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "../utils/dummy_logger.h"  // dummy_log
 #include "../utils/wrap_mutex.h"    // SCOPE_LOCK
 
-#define MODULENAME      "core::Server"
+#define MODULENAME      "server_core::Server"
 
 NAMESPACE_SERVER_CORE_START
 

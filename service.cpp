@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: service.cpp 679 2014-07-02 16:51:01Z serge $
+// $Id: service.cpp 711 2014-07-03 18:06:33Z serge $
 
 #include "service.h"                // self
 
@@ -30,7 +30,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "../utils/dummy_logger.h"  // dummy_log
 #include "i_handler.h"              // IHandler
 
-#define MODULENAME      "core::Service"
+#define MODULENAME      "server_core::Service"
 
 NAMESPACE_SERVER_CORE_START
 
@@ -57,7 +57,11 @@ size_t Service::on_receive( const char* buffer, size_t buffer_size, size_t recei
 
     dummy_log_info( MODULENAME, "on_receive: received '%s'", buffer );
 
-    std::string reply = handler_.handle( buffer + receive_pos );
+    std::string received;
+
+    received.assign( buffer + receive_pos, buffer_size );
+
+    std::string reply = handler_.handle( received );
 
     dummy_log_info( MODULENAME, "on_receive: response '%s'", reply.c_str() );
 
