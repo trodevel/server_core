@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: service.cpp 711 2014-07-03 18:06:33Z serge $
+// $Id: service.cpp 712 2014-07-07 17:01:00Z serge $
 
 #include "service.h"                // self
 
@@ -34,14 +34,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 NAMESPACE_SERVER_CORE_START
 
+const int RECV_BUFFER_SIZE  = 32768;
+
 Service::Service( tcpserv::Server* server, boost::asio::ip::tcp::socket* socket, IHandler & handler ) :
         tcpserv::Service( server, socket ),
         handler_( handler )
 {
+    recv_buffer_.reserve( RECV_BUFFER_SIZE );
 }
 
 size_t Service::on_receive( const char* buffer, size_t buffer_size, size_t receive_pos, const boost::system::error_code& error )
 {
+    static const std::string eom( "<EOM>" );    // End-Of-Message token
+
     dummy_log_trace( MODULENAME, "on_receive: enter" );
 
     // in case of error close the service and disconnect the client
@@ -55,28 +60,53 @@ size_t Service::on_receive( const char* buffer, size_t buffer_size, size_t recei
         return receive_pos;
     }
 
-    dummy_log_info( MODULENAME, "on_receive: received '%s'", buffer );
+    dummy_log_info( MODULENAME, "on_receive: received '%s'", buffer + receive_pos );
 
-    std::string received;
+    if( buffer_size + recv_buffer_.size() >= RECV_BUFFER_SIZE )
+    {
+        // ERROR: cannot accept new data
 
-    received.assign( buffer + receive_pos, buffer_size );
+        dummy_log_error( MODULENAME, "on_receive: recv buffer overflow, curr size %d, new data size %d, MAX SIZE %d",
+                recv_buffer_.size(), buffer_size, RECV_BUFFER_SIZE );
 
-    std::string reply = handler_.handle( received );
+        send( "ERROR: recv buffer overflow, closing connection" );
 
-    dummy_log_info( MODULENAME, "on_receive: response '%s'", reply.c_str() );
+        // explicitly close the connection
+        close_async();
 
-    send( reply );
+        return buffer_size;
+    }
 
-    // explicitly close the connection
-    close_async();
+    recv_buffer_.append( buffer, buffer_size );
 
-#ifdef XXX
+    std::string::size_type eom_pos  = recv_buffer_.find( eom );
+
+    if( eom_pos != std::string::npos )
+    {
+        // got complete string with EOM marker
+
+        std::string msg = recv_buffer_.substr( 0, eom_pos );
+
+        dummy_log_info( MODULENAME, "on_receive: got complete message: %d: '%s'", msg.size(), msg.c_str() );
+
+        // copy the rest into the front
+        recv_buffer_    = recv_buffer_.substr( eom_pos + eom.size() );
+
+        std::string reply = handler_.handle( msg );
+
+        dummy_log_info( MODULENAME, "on_receive: sending response '%s'", reply.c_str() );
+
+        send( reply );
+
+        // explicitly close the connection
+        close_async();
+
+        return buffer_size;
+    }
 
     // in case of error close the service and disconnect the client
     if( error )
         close();
-
-#endif // XXX
 
     // update read position
     size_t read_pos = buffer_size;

@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: service.h 679 2014-07-02 16:51:01Z serge $
+// $Id: service.h 712 2014-07-07 17:01:00Z serge $
 
 #include "../tcpserv/service.h"
 
@@ -42,7 +42,9 @@ protected:
     virtual size_t on_receive( const char* buffer, size_t buffer_size, size_t receive_pos, const boost::system::error_code& error );
 
 private:
-    IHandler    & handler_;
+    IHandler        & handler_;
+
+    std::string     recv_buffer_;
 
 };
 
