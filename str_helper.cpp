@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: str_helper.cpp 681 2014-07-02 17:04:54Z serge $
+// $Id: str_helper.cpp 658 2014-07-02 17:04:54Z serge $
 
 #include "str_helper.h"             // self
 

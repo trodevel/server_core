@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: generic_request.h 681 2014-07-02 17:04:54Z serge $
+// $Id: generic_request.h 658 2014-07-02 17:04:54Z serge $
 
 #ifndef GENERIC_REQUEST_H
 #define GENERIC_REQUEST_H

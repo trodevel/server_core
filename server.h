@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: server.h 679 2014-07-02 16:51:01Z serge $
+// $Id: server.h 656 2014-07-02 16:51:01Z serge $
 
 #include <boost/thread.hpp>         // boost::mutex
 

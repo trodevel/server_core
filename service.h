@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: service.h 712 2014-07-07 17:01:00Z serge $
+// $Id: service.h 903 2014-08-12 15:18:54Z serge $
 
 #include "../tcpserv/service.h"
 
@@ -35,7 +35,7 @@ class Service: public tcpserv::Service
 
 public:
 
-    Service( tcpserv::Server* server, boost::asio::ip::tcp::socket* socket, IHandler & handler );
+    Service( tcpserv::Server* server, boost::asio::io_service * io_service, boost::asio::ip::tcp::socket* socket, IHandler & handler );
 
 protected:
 

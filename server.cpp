@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: server.cpp 707 2014-07-03 17:34:14Z serge $
+// $Id: server.cpp 904 2014-08-12 15:19:16Z serge $
 
 #include "../tcpserv/server.h"
 #include "../tcpserv/service.h"
@@ -65,7 +65,7 @@ tcpserv::ServicePtr Server::create_service( boost::asio::ip::tcp::socket* socket
         return tcpserv::ServicePtr();
     }
 
-    tcpserv::ServicePtr s( new Service( this, socket, *handler_ ) );
+    tcpserv::ServicePtr s( new Service( this, get_io_service(), socket, *handler_ ) );
     s->get_receive_buffer().reset( 100 );
     return s;
 }

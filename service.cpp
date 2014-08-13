@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: service.cpp 712 2014-07-07 17:01:00Z serge $
+// $Id: service.cpp 903 2014-08-12 15:18:54Z serge $
 
 #include "service.h"                // self
 
@@ -36,8 +36,8 @@ NAMESPACE_SERVER_CORE_START
 
 const int RECV_BUFFER_SIZE  = 32768;
 
-Service::Service( tcpserv::Server* server, boost::asio::ip::tcp::socket* socket, IHandler & handler ) :
-        tcpserv::Service( server, socket ),
+Service::Service( tcpserv::Server* server, boost::asio::io_service * io_service, boost::asio::ip::tcp::socket* socket, IHandler & handler ) :
+        tcpserv::Service( server, io_service, socket ),
         handler_( handler )
 {
     recv_buffer_.reserve( RECV_BUFFER_SIZE );
