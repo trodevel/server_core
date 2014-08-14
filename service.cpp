@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: service.cpp 903 2014-08-12 15:18:54Z serge $
+// $Id: service.cpp 954 2014-08-14 12:24:22Z serge $
 
 #include "service.h"                // self
 
@@ -60,7 +60,7 @@ size_t Service::on_receive( const char* buffer, size_t buffer_size, size_t recei
         return receive_pos;
     }
 
-    dummy_log_info( MODULENAME, "on_receive: received '%s'", buffer + receive_pos );
+    dummy_log_debug( MODULENAME, "on_receive: received '%s'", buffer + receive_pos );
 
     if( buffer_size + recv_buffer_.size() >= RECV_BUFFER_SIZE )
     {
@@ -87,14 +87,19 @@ size_t Service::on_receive( const char* buffer, size_t buffer_size, size_t recei
 
         std::string msg = recv_buffer_.substr( 0, eom_pos );
 
-        dummy_log_info( MODULENAME, "on_receive: got complete message: %d: '%s'", msg.size(), msg.c_str() );
+        dummy_log_info( MODULENAME, "received from %s, size %d: '%s'",
+                get_socket__()->remote_endpoint().address().to_string().c_str(),
+                msg.size(), msg.c_str() );
 
         // copy the rest into the front
         recv_buffer_    = recv_buffer_.substr( eom_pos + eom.size() );
 
         std::string reply = handler_.handle( msg );
 
-        dummy_log_info( MODULENAME, "on_receive: sending response '%s'", reply.c_str() );
+        dummy_log_info( MODULENAME, "sending to %s, size %d: '%s'",
+                get_socket__()->remote_endpoint().address().to_string().c_str(),
+                reply.size(),
+                reply.c_str() );
 
         send( reply );
 

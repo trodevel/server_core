@@ -19,10 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: server.cpp 904 2014-08-12 15:19:16Z serge $
-
-#include "../tcpserv/server.h"
-#include "../tcpserv/service.h"
+// $Id: server.cpp 958 2014-08-14 18:06:16Z serge $
 
 #include "server.h"             // self
 #include "service.h"            // Service
@@ -44,11 +41,16 @@ bool Server::init(
 {
     SCOPE_LOCK( mutex_ );
 
-    if( !cfg.port || !cfg.max_threads || !cfg.max_clients || !handler )
+    if( !handler )
         return false;
 
-    cfg_        = cfg;
+    bool b = tcpserv::Server::init( cfg );
+    if( !b )
+        return false;
+
     handler_    = handler;
+
+    dummy_log_info( MODULENAME, "init: ok" );
 
     return true;
 }
@@ -65,23 +67,9 @@ tcpserv::ServicePtr Server::create_service( boost::asio::ip::tcp::socket* socket
         return tcpserv::ServicePtr();
     }
 
-    tcpserv::ServicePtr s( new Service( this, get_io_service(), socket, *handler_ ) );
+    tcpserv::ServicePtr s( new Service( this, & get_io_service(), socket, *handler_ ) );
     s->get_receive_buffer().reset( 100 );
     return s;
-}
-
-void Server::start_listen()
-{
-    SCOPE_LOCK( mutex_ );
-
-    if( !is_inited__() )
-    {
-        dummy_log_error( MODULENAME, "start_listen: not inited" );
-
-        return;
-    }
-
-    tcpserv::Server::start_listen( cfg_.port, cfg_.max_threads, cfg_.max_clients );
 }
 
 bool Server::is_inited__() const
@@ -89,29 +77,11 @@ bool Server::is_inited__() const
     return handler_ ? true : false;
 }
 
-void Server::thread_func()
+
+// interface threcon::IControllable
+bool Server::shutdown()
 {
-    dummy_log_info( MODULENAME, "thread_func: started" );
-
-    bool should_run    = true;
-    while( should_run )
-    {
-        THREAD_SLEEP_MS( 3 );
-    }
-
-    tcpserv::Server::join();
-
-    dummy_log_info( MODULENAME, "thread_func: ended" );
-}
-
-void Server::shutdown( uint32 n, uint32 k )
-{
-    tcpserv::Server::shutdown( n, k );
-}
-
-void Server::join_client_threads()
-{
-    tcpserv::Server::join();
+    tcpserv::Server::shutdown( 0 );
 }
 
 

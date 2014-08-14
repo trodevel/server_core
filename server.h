@@ -19,10 +19,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: server.h 656 2014-07-02 16:51:01Z serge $
+// $Id: server.h 958 2014-08-14 18:06:16Z serge $
 
 #include <boost/thread.hpp>         // boost::mutex
 
+#include "../threcon/i_controllable.h"  // IControllable
 #include "../tcpserv/server.h"  // Server, ServicePtr
 #include "../utils/types.h"     // uint16, uint32
 
@@ -32,15 +33,10 @@ NAMESPACE_SERVER_CORE_START
 
 class IHandler;
 
-class Server: protected tcpserv::Server
+class Server: public tcpserv::Server, public virtual threcon::IControllable
 {
 public:
-    struct Config
-    {
-        uint16          port;
-        uint32          max_threads;
-        uint32          max_clients;
-    };
+    typedef tcpserv::Server::Config Config;
 
 public:
 
@@ -52,13 +48,9 @@ public:
 
     virtual tcpserv::ServicePtr create_service( boost::asio::ip::tcp::socket* socket );
 
-    void start_listen();
+    // interface threcon::IControllable
+    virtual bool shutdown();
 
-    void thread_func();
-
-    void shutdown( uint32 n, uint32 k );
-
-    void join_client_threads();
 
 private:
 
@@ -69,7 +61,6 @@ private:
 
     boost::thread   broadcast_thread_;
 
-    Config          cfg_;
     IHandler        * handler_;
 
 };

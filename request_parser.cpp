@@ -19,13 +19,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: request_parser.cpp 657 2014-07-02 16:59:31Z serge $
+// $Id: request_parser.cpp 952 2014-08-14 12:08:48Z serge $
 
 #include "request_parser.h"         // self
-
-#include <sstream>                  // std::ostringstream
-#include <boost/lexical_cast.hpp>   // lexical_cast
-#include <boost/algorithm/hex.hpp>  // boost::unhex
 
 #include "../utils/tokenizer.h"     // boost wrapper
 #include "../utils/trim.h"          // trim

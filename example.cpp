@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: example.cpp 657 2014-07-02 16:59:31Z serge $
+// $Id: example.cpp 950 2014-08-14 12:01:33Z serge $
 
 #include <cstdio>
 #include <boost/thread.hpp>
@@ -48,7 +48,7 @@ class Handler: public virtual server_core::IHandler
     }
 };
 
-void dummy_thread()
+void dummy_thread( server_core::Server * server )
 {
     std::cout << "dummy_thread(): started" << std::endl;
 
@@ -67,6 +67,8 @@ void dummy_thread()
         THREAD_SLEEP_MS( 3 );
     }
 
+    server->shutdown( 3 );
+
     std::cout << "dummy_thread(): exited" << std::endl;
 }
 
@@ -84,17 +86,12 @@ int main()
 
         s.init( cfg, &h );
 
-        s.start_listen();
-
         boost::thread_group tg;
 
-        tg.create_thread( &dummy_thread );
+        tg.create_thread( boost::bind( &server_core::Server::thread_func, &s ) );
+        tg.create_thread( boost::bind( &dummy_thread, &s ) );
 
         tg.join_all();
-
-        s.shutdown( 2, 2 );
-
-        s.join_client_threads();
 
         std::cout << "exit" << std::endl;
     }
