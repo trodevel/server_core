@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: example.cpp 950 2014-08-14 12:01:33Z serge $
+// $Id: example.cpp 1004 2014-09-12 17:06:29Z serge $
 
 #include <cstdio>
 #include <boost/thread.hpp>
@@ -67,7 +67,7 @@ void dummy_thread( server_core::Server * server )
         THREAD_SLEEP_MS( 3 );
     }
 
-    server->shutdown( 3 );
+    server->shutdown();
 
     std::cout << "dummy_thread(): exited" << std::endl;
 }
