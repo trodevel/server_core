@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Id: service.cpp 954 2014-08-14 12:24:22Z serge $
+// $Id: service.cpp 1026 2014-09-19 16:56:37Z serge $
 
 #include "service.h"                // self
 
@@ -43,7 +43,7 @@ Service::Service( tcpserv::Server* server, boost::asio::io_service * io_service,
     recv_buffer_.reserve( RECV_BUFFER_SIZE );
 }
 
-size_t Service::on_receive( const char* buffer, size_t buffer_size, size_t receive_pos, const boost::system::error_code& error )
+size_t Service::on_receive( const char* buffer, size_t buffer_size, const boost::system::error_code& error )
 {
     static const std::string eom( "<EOM>" );    // End-Of-Message token
 
@@ -53,14 +53,7 @@ size_t Service::on_receive( const char* buffer, size_t buffer_size, size_t recei
     if( error )
         close();
 
-    if( receive_pos >= buffer_size )
-    {
-        dummy_log_trace( MODULENAME, "on_receive: exit" );
-
-        return receive_pos;
-    }
-
-    dummy_log_debug( MODULENAME, "on_receive: received '%s'", buffer + receive_pos );
+    dummy_log_debug( MODULENAME, "on_receive: received '%s'", buffer );
 
     if( buffer_size + recv_buffer_.size() >= RECV_BUFFER_SIZE )
     {
