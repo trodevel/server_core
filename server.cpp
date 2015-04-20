@@ -19,12 +19,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 1404 $ $Date:: 2015-01-16 #$ $Author: serge $
+// $Revision: 1712 $ $Date:: 2015-04-20 #$ $Author: serge $
 
 #include "server.h"             // self
 #include "service.h"            // Service
 #include "../utils/dummy_logger.h"  // dummy_log
-#include "../utils/wrap_mutex.h"    // SCOPE_LOCK
+#include "../utils/mutex_helper.h"  // MUTEX_SCOPE_LOCK
 
 #define MODULENAME      "server_core::Server"
 
@@ -39,7 +39,7 @@ bool Server::init(
         const Config    & cfg,
         IHandler        * handler )
 {
-    SCOPE_LOCK( mutex_ );
+    MUTEX_SCOPE_LOCK( mutex_ );
 
     if( !handler )
         return false;
@@ -58,7 +58,7 @@ bool Server::init(
 
 tcpserv::ServicePtr Server::create_service( boost::asio::ip::tcp::socket* socket )
 {
-    SCOPE_LOCK( mutex_ );
+    MUTEX_SCOPE_LOCK( mutex_ );
 
     if( !is_inited__() )
     {

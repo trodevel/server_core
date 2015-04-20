@@ -20,7 +20,7 @@ endif
 BOOST_INC=$(BOOST_PATH)
 BOOST_LIB_PATH=$(BOOST_PATH)/stage/lib
 
-BOOST_LIB_NAMES := boost_system boost_thread
+BOOST_LIB_NAMES := boost_system
 BOOST_LIBS = $(patsubst %,$(BOOST_LIB_PATH)/lib%.a,$(BOOST_LIB_NAMES))
 
 ###################################################################
@@ -38,7 +38,7 @@ ifeq "$(MODE)" "debug"
     OBJDIR=./DBG
     BINDIR=./DBG
 
-    CFLAGS := -Wall -std=c++0x -ggdb -g3
+    CFLAGS := -Wall -std=c++11 -ggdb -g3 -Wl,--no-as-needed
     LFLAGS := -Wall -lstdc++ -lrt -ldl -lm -g
 #    LFLAGS_TEST := -Wall -lstdc++ -lrt -ldl -g -L. $(BINDIR)/$(LIBNAME).a $(BINDIR)/libutils.a -lm
     LFLAGS_TEST := -Wall -lstdc++ -lrt -ldl -g -L. -lm
@@ -48,7 +48,7 @@ else
     OBJDIR=./OPT
     BINDIR=./OPT
 
-    CFLAGS := -Wall -std=c++0x
+    CFLAGS := -Wall -std=c++11 -Wl,--no-as-needed
     LFLAGS := -Wall -lstdc++ -lrt -ldl -lm
 #    LFLAGS_TEST := -Wall -lstdc++ -lrt -ldl -L. $(BINDIR)/$(LIBNAME).a $(BINDIR)/libutils.a -lm
     LFLAGS_TEST := -Wall -lstdc++ -lrt -ldl -L. -lm

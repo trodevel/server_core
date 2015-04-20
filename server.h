@@ -19,9 +19,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 1404 $ $Date:: 2015-01-16 #$ $Author: serge $
+// $Revision: 1712 $ $Date:: 2015-04-20 #$ $Author: serge $
 
-#include <boost/thread.hpp>         // boost::mutex
+#include <mutex>                // std::mutex
+#include <thread>               // std::thread
 
 #include "../threcon/i_controllable.h"  // IControllable
 #include "../tcpserv/server.h"  // Server, ServicePtr
@@ -57,11 +58,11 @@ private:
     bool is_inited__() const;
 
 private:
-    mutable boost::mutex        mutex_;
+    mutable std::mutex      mutex_;
 
-    boost::thread   broadcast_thread_;
+    std::thread             broadcast_thread_;
 
-    IHandler        * handler_;
+    IHandler                * handler_;
 
 };
 

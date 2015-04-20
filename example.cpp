@@ -19,13 +19,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 1404 $ $Date:: 2015-01-16 #$ $Author: serge $
+// $Revision: 1712 $ $Date:: 2015-04-20 #$ $Author: serge $
 
 #include <cstdio>
-#include <boost/thread.hpp>
-#include <boost/bind.hpp>
+#include <thread>                   // std::thread
+#include <functional>               // std::bind
 
-#include "../utils/wrap_mutex.h"    // THREAD_SLEEP_MS
+#include "../utils/mutex_helper.h"  // THIS_THREAD_SLEEP_MS
 
 #include "request_parser.h"         // RequestParser
 #include "str_helper.h"             // StrHelper
@@ -64,7 +64,7 @@ void dummy_thread( server_core::Server * server )
         if( input == "exit" || input == "quit" )
             break;
 
-        THREAD_SLEEP_MS( 3 );
+        THIS_THREAD_SLEEP_MS( 3 );
     }
 
     server->shutdown();
@@ -86,12 +86,13 @@ int main()
 
         s.init( cfg, &h );
 
-        boost::thread_group tg;
+        std::vector<std::thread> tg;
 
-        tg.create_thread( boost::bind( &server_core::Server::thread_func, &s ) );
-        tg.create_thread( boost::bind( &dummy_thread, &s ) );
+        tg.push_back( std::thread( std::bind( &server_core::Server::thread_func, &s ) ) );
+        tg.push_back( std::thread( std::bind( &dummy_thread, &s ) ) );
 
-        tg.join_all();
+        for( auto & t : tg )
+            t.join();
 
         std::cout << "exit" << std::endl;
     }
