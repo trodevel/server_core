@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 1712 $ $Date:: 2015-04-20 #$ $Author: serge $
+// $Revision: 1770 $ $Date:: 2015-05-21 #$ $Author: serge $
 
 #include "server.h"             // self
 #include "service.h"            // Service
@@ -81,7 +81,11 @@ bool Server::is_inited__() const
 // interface threcon::IControllable
 bool Server::shutdown()
 {
+    dummy_log_debug( MODULENAME, "shutdown()" );
+
     tcpserv::Server::shutdown( 0 );
+
+    return true;
 }
 
 
