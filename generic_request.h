@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 1404 $ $Date:: 2015-01-16 #$ $Author: serge $
+// $Revision: 3322 $ $Date:: 2016-01-30 #$ $Author: serge $
 
 #ifndef GENERIC_REQUEST_H
 #define GENERIC_REQUEST_H
@@ -43,6 +43,8 @@ public:
     const ParamMap  & get_params() const;
 
     const std::string & get_param( const std::string & key ) const;
+    bool has_param( const std::string & key ) const;
+    bool has_param( const std::string & key, std::string & value ) const;
 
 private:
     ParamMap        params_;

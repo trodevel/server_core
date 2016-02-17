@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 1404 $ $Date:: 2015-01-16 #$ $Author: serge $
+// $Revision: 3322 $ $Date:: 2016-01-30 #$ $Author: serge $
 
 #include "generic_request.h"    // self
 
@@ -52,6 +52,23 @@ const std::string & GenericRequest::get_param( const std::string & key ) const
         return empty;
 
     return it->second;
+}
+
+bool GenericRequest::has_param( const std::string & key ) const
+{
+    return params_.count( key ) > 0;
+}
+
+bool GenericRequest::has_param( const std::string & key, std::string & value ) const
+{
+    auto it = params_.find( key );
+
+    if( it == params_.end() )
+        return false;
+
+    value = it->second;
+
+    return true;
 }
 
 NAMESPACE_SERVER_CORE_END

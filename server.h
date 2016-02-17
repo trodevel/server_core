@@ -19,14 +19,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 1712 $ $Date:: 2015-04-20 #$ $Author: serge $
+// $Revision: 3418 $ $Date:: 2016-02-16 #$ $Author: serge $
 
 #include <mutex>                // std::mutex
 #include <thread>               // std::thread
 
 #include "../threcon/i_controllable.h"  // IControllable
 #include "../tcpserv/server.h"  // Server, ServicePtr
-#include "../utils/types.h"     // uint16, uint32
 
 #include "namespace_lib.h"      // NAMESPACE_SERVER_CORE_START
 
