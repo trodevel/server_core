@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 1712 $ $Date:: 2015-04-20 #$ $Author: serge $
+// $Revision: 3618 $ $Date:: 2016-04-03 #$ $Author: serge $
 
 #include <cstdio>
 #include <thread>                   // std::thread
@@ -27,8 +27,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include "../utils/mutex_helper.h"  // THIS_THREAD_SLEEP_MS
 
-#include "request_parser.h"         // RequestParser
-#include "str_helper.h"             // StrHelper
+#include "../generic_request/request_parser.h"      // RequestParser
+#include "../generic_request/str_helper.h"          // StrHelper
 #include "server.h"                 // Server
 #include "i_handler.h"              // IHandler
 
@@ -38,9 +38,9 @@ class Handler: public virtual server_core::IHandler
     {
         std::cout << "got request '" << s << "'" << std::endl;
 
-        server_core::GenericRequest r = server_core::RequestParser::to_generic_request( s );
+        generic_request::Request r = generic_request::RequestParser::to_request( s );
 
-        std::string parsed_s = server_core::StrHelper::to_string( r );
+        std::string parsed_s = generic_request::StrHelper::to_string( r );
 
         std::cout << "parsed = " << parsed_s << std::endl;
 

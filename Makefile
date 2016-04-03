@@ -81,10 +81,10 @@ EXE=
 
 #vpath %.cpp .
 
-SRCC = server.cpp service.cpp generic_request.cpp request_parser.cpp str_helper.cpp
+SRCC = server.cpp service.cpp
 OBJS = $(patsubst %.cpp,$(OBJDIR)/%.o,$(SRCC)) $(patsubst %.c,$(OBJDIR)/%.o,$(SRCC))
 
-LIB_NAMES = tcpserv utils
+LIB_NAMES = tcpserv utils generic_request
 LIBS = $(patsubst %,$(BINDIR)/lib%.a,$(LIB_NAMES))
 
 all: static
@@ -129,6 +129,10 @@ $(BINDIR)/libtcpserv.a:
 $(BINDIR)/libutils.a:
 	cd ../utils; make; cd $(project)
 	ln -sf ../../utils/$@ $(BINDIR)
+
+$(BINDIR)/libgeneric_request.a:
+	cd ../generic_request; make; cd $(project)
+	ln -sf ../../generic_request/$@ $(BINDIR)
 
 $(BINDIR):
 	mkdir -p $(OBJDIR)
