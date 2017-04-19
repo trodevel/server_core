@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 3444 $ $Date:: 2016-02-23 #$ $Author: serge $
+// $Revision: 6658 $ $Date:: 2017-04-18 #$ $Author: serge $
 
 #include <mutex>                // std::mutex
 #include <thread>               // std::thread
@@ -44,6 +44,8 @@ public:
 
     bool init(
             const Config    & cfg,
+            uint32_t        log_id,
+            uint32_t        log_id_service,
             IHandler        * handler );
 
     virtual tcpserv::ServicePtr create_service( boost::asio::ip::tcp::socket* socket );
@@ -61,8 +63,9 @@ private:
 
     std::thread             broadcast_thread_;
 
+    uint32_t                log_id_;
+    uint32_t                log_id_service_;
     IHandler                * handler_;
-
 };
 
 

@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 1404 $ $Date:: 2015-01-16 #$ $Author: serge $
+// $Revision: 6658 $ $Date:: 2017-04-18 #$ $Author: serge $
 
 #include "../tcpserv/service.h"
 
@@ -35,7 +35,8 @@ class Service: public tcpserv::Service
 
 public:
 
-    Service( tcpserv::Server* server, boost::asio::io_service * io_service, boost::asio::ip::tcp::socket* socket, IHandler & handler );
+    Service( tcpserv::Server* server, boost::asio::io_service * io_service, boost::asio::ip::tcp::socket* socket, IHandler & handler,
+            uint32_t        log_id );
 
 protected:
 
@@ -44,6 +45,7 @@ protected:
 private:
     IHandler        & handler_;
 
+    uint32_t        log_id_;
     std::string     recv_buffer_;
 
 };
