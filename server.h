@@ -19,7 +19,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 6658 $ $Date:: 2017-04-18 #$ $Author: serge $
+// $Revision: 7507 $ $Date:: 2017-08-03 #$ $Author: serge $
+
+#ifndef SERVER_CORE__SERVER_H
+#define SERVER_CORE__SERVER_H
 
 #include <mutex>                // std::mutex
 #include <thread>               // std::thread
@@ -46,6 +49,8 @@ public:
             const Config    & cfg,
             uint32_t        log_id,
             uint32_t        log_id_service,
+            uint32_t        log_id_tcp_server,
+            uint32_t        log_id_tcp_service,
             IHandler        * handler );
 
     virtual tcpserv::ServicePtr create_service( boost::asio::ip::tcp::socket* socket );
@@ -65,8 +70,11 @@ private:
 
     uint32_t                log_id_;
     uint32_t                log_id_service_;
+    uint32_t                log_id_tcp_service_;
     IHandler                * handler_;
 };
 
 
 NAMESPACE_SERVER_CORE_END
+
+#endif // SERVER_CORE__SERVER_H
