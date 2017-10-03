@@ -19,11 +19,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-// $Revision: 6658 $ $Date:: 2017-04-18 #$ $Author: serge $
+// $Revision: 7953 $ $Date:: 2017-10-02 #$ $Author: serge $
 
 #include <cstdio>
 #include <thread>                   // std::thread
 #include <functional>               // std::bind
+#include <iostream>                 // std::cout
 
 #include "../utils/mutex_helper.h"  // THIS_THREAD_SLEEP_MS
 #include "../utils/dummy_logger.h"  // dummy_log_set_log_level
@@ -88,7 +89,10 @@ int main()
         auto serv_core_log_id   = dummy_logger::register_module( "server_core::Server" );
         auto service_log_id     = dummy_logger::register_module( "server_core::Service" );
 
-        s.init( cfg, serv_core_log_id, service_log_id, &h );
+        auto log_id_tcp_server      = dummy_logger::register_module( "tcpserv::Server" );
+        auto log_id_tcp_service     = dummy_logger::register_module( "tcpserv::Service" );
+
+        s.init( cfg, serv_core_log_id, service_log_id, log_id_tcp_server, log_id_tcp_service, &h );
 
         std::vector<std::thread> tg;
 
